@@ -133,7 +133,7 @@ public class TowerTracker {
 //			if there is only 1 target, then we have found the target we want
 			if(contours.size() == 1){
 				Rect rec = Imgproc.boundingRect(contours.get(0));
-//				"fun" math
+//				"fun" math brought to you by miss daisy (team 341)!
 				y = rec.br().y + rec.height / 2;
 				y= -((2 * (y / matOriginal.height())) - 1);
 				distance = (TOP_TARGET_HEIGHT - TOP_CAMERA_HEIGHT) / 
