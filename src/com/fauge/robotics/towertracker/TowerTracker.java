@@ -1,5 +1,6 @@
 package com.fauge.robotics.towertracker;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -9,6 +10,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
@@ -40,13 +42,16 @@ public class TowerTracker {
 	BLACK = new Scalar(0,0,0),
 	YELLOW = new Scalar(0, 255, 255),
 //	these are the threshold values in order 
-	LOWER_BOUNDS = new Scalar(0,0,165),
-	UPPER_BOUNDS = new Scalar(180,255,255);
+	LOWER_BOUNDS = new Scalar(58,0,109),
+	UPPER_BOUNDS = new Scalar(93,255,240);
+	
+//	the size for resing the image
+	public static final Size resize = new Size(320,240);
 	
 //	ignore these
 	public static VideoCapture videoCapture;
 	public static Mat matOriginal, matHSV, matThresh, clusters, matHeirarchy;
-
+	
 //	Constants for known variables
 //	the height to the top of the target in first stronghold is 97 inches	
 	public static final int TOP_TARGET_HEIGHT = 97;
@@ -108,8 +113,11 @@ public class TowerTracker {
 //		only run for the specified time
 		while(FrameCount < 100){
 			contours.clear();
+//			capture from the axis camera
 			videoCapture.read(matOriginal);
-			Imgproc.cvtColor(matOriginal,matHSV,Imgproc.COLOR_RGB2HSV);			
+//			captures from a static file for testing
+//			matOriginal = Imgcodecs.imread("someFile.png");
+			Imgproc.cvtColor(matOriginal,matHSV,Imgproc.COLOR_BGR2HSV);			
 			Core.inRange(matHSV, LOWER_BOUNDS, UPPER_BOUNDS, matThresh);
 			Imgproc.findContours(matThresh, contours, matHeirarchy, Imgproc.RETR_EXTERNAL, 
 					Imgproc.CHAIN_APPROX_SIMPLE);
@@ -118,7 +126,7 @@ public class TowerTracker {
 			for (Iterator<MatOfPoint> iterator = contours.iterator(); iterator.hasNext();) {
 				MatOfPoint matOfPoint = (MatOfPoint) iterator.next();
 				Rect rec = Imgproc.boundingRect(matOfPoint);
-					if(rec.height*rec.width < 400 || rec.height < 20 || rec.width < 20){
+					if(rec.height < 25 || rec.width < 25){
 						iterator.remove();
 					continue;
 					}
