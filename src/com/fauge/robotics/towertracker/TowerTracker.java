@@ -142,17 +142,17 @@ public class TowerTracker {
 			if(contours.size() == 1){
 				Rect rec = Imgproc.boundingRect(contours.get(0));
 //				"fun" math brought to you by miss daisy (team 341)!
-				y = rec.br().y + rec.height / 2;
+				y = rec.br().y + rec.height / 2.0;
 				y= -((2 * (y / matOriginal.height())) - 1);
 				distance = (TOP_TARGET_HEIGHT - TOP_CAMERA_HEIGHT) / 
 						Math.tan((y * VERTICAL_FOV / 2.0 + CAMERA_ANGLE) * Math.PI / 180);
 //				angle to target...would not rely on this
-				targetX = rec.tl().x + rec.width / 2;
+				targetX = rec.tl().x + rec.width / 2.0;
 				targetX = (2 * (targetX / matOriginal.width())) - 1;
 				azimuth = normalize360(targetX*HORIZONTAL_FOV /2.0 + 0);
 //				drawing info on target
-				Point center = new Point(rec.br().x-rec.width / 2 - 15,rec.br().y - rec.height / 2);
-				Point centerw = new Point(rec.br().x-rec.width / 2 - 15,rec.br().y - rec.height / 2 - 20);
+				Point center = new Point(rec.br().x-rec.width / 2.0 - 15,rec.br().y - rec.height / 2.0);
+				Point centerw = new Point(rec.br().x-rec.width / 2.0 - 15,rec.br().y - rec.height / 2.0 - 20);
 				Imgproc.putText(matOriginal, ""+(int)distance, center, Core.FONT_HERSHEY_PLAIN, 1, BLACK);
 				Imgproc.putText(matOriginal, ""+(int)azimuth, centerw, Core.FONT_HERSHEY_PLAIN, 1, BLACK);
 			}
@@ -166,14 +166,8 @@ public class TowerTracker {
 	 * @param angle a nonnormalized angle
 	 */
 	public static double normalize360(double angle){
-		while(angle >= 360.0)
-        {
-            angle -= 360.0;
-        }
-        while(angle < 0.0)
-        {
-            angle += 360.0;
-        }
-        return angle;
+		// Mod the angle by 360 to give a value between (0, 360]
+		// Make it positive (by adding 360) if required
+		return (angle < 0) ? angle % 360 + 360 : angle % 360;
 	}
 }
