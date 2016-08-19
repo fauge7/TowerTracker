@@ -227,18 +227,10 @@ public class TowerTracker {
 				targetX = (2 * (targetX / matOriginal.width())) - 1;
 				azimuth = normalize360(targetX*HORIZONTAL_FOV /2.0 + 0);
 //				drawing info on target
-<<<<<<< HEAD
-				Point center = new Point(rec.br().x-rec.width / 2 - 15,rec.br().y - rec.height / 2);
-				Point centerw = new Point(rec.br().x-rec.width / 2 - 15,rec.br().y - rec.height / 2 - 20);
-//				System.out.println(azimuth);
-//				Imgproc.putText(matOriginal, ""+(int)distance, center, Core.FONT_HERSHEY_PLAIN, 1, BLACK);
-//				Imgproc.putText(matOriginal, ""+(int)azimuth, centerw, Core.FONT_HERSHEY_PLAIN, 1, BLACK);
-=======
 				Point center = new Point(rec.br().x-rec.width / 2.0 - 15,rec.br().y - rec.height / 2.0);
 				Point centerw = new Point(rec.br().x-rec.width / 2.0 - 15,rec.br().y - rec.height / 2.0 - 20);
 				Imgproc.putText(matOriginal, ""+(int)distance, center, Core.FONT_HERSHEY_PLAIN, 1, BLACK);
 				Imgproc.putText(matOriginal, ""+(int)azimuth, centerw, Core.FONT_HERSHEY_PLAIN, 1, BLACK);
->>>>>>> origin/master
 			}
 //			output an image for debugging
 			Imgcodecs.imwrite("output.png", matOriginal);
